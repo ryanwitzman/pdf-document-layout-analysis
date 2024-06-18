@@ -49,12 +49,12 @@ def predict_doclaynet():
     VGTTrainer.test(configuration, model)
 
 
-def analyze_pdf(file: AnyStr):
+def analyze_pdf(file: AnyStr, tokens: list[dict]):
     pdf_path = pdf_content_to_pdf_path(file)
     service_logger.info(f"Creating PDF images")
     pdf_images_list: list[PdfImages] = [PdfImages.from_pdf_path(pdf_path)]
     create_word_grid([pdf_images.pdf_features for pdf_images in pdf_images_list])
-    get_annotations(pdf_images_list)
+    get_annotations(pdf_images_list,tokens)
     predict_doclaynet()
     remove_files()
     predicted_segments = get_most_probable_pdf_segments("doclaynet", pdf_images_list, False)
